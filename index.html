@@ -1,84 +1,36 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Windows 95 Hack Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bất ngờ chưa!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000; /* Nền đen để chữ nổi bật hẳn lên */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Arial Black', Impact, sans-serif;
+        }
+        h1 {
+            color: #FF0000; /* Màu đỏ rực tạo hiệu ứng giật mình */
+            font-size: 8vw; /* Chữ tự động phóng to hết cỡ theo kích thước màn hình */
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 5px 5px 0px #FFFFFF; /* Đổ bóng màu trắng tạo hiệu ứng 3D */
+            margin: 0;
+            padding: 20px;
+        }
+    </style>
 </head>
-<body style="background: teal; font-family: monospace; overflow: hidden; margin: 0; padding: 20px;">
+<body>
 
-  <!-- Nút kích hoạt ban đầu -->
-  <button id="btnHack" style="font-size: 16px; padding: 10px 20px; cursor: pointer;">
-    Bấm vào đây để hack PC của tui
-  </button>
+    <h1>BẠN BỊ LỪA RỒI!!</h1>
 
-  <!-- Vùng hiển thị chữ chạy nhảy -->
-  <pre id="log" style="color: lime; background: black; padding: 10px; width: 400px; height: 250px; overflow: hidden; display: none; margin-top: 20px;"></pre>
-
-  <script>
-    const btn = document.getElementById('btnHack');
-    const log = document.getElementById('log');
-
-    const errorMsgs = [
-      "Fatal Exception 0E occurred at 0028:C0011E36.",
-      "This program has performed an illegal operation.",
-      "KERNEL32.DLL general protection fault.",
-      "Stack overflow at address 0x00007FFF.",
-      "System memory corrupted!",
-      "Hard disk C: cannot be read."
-    ];
-
-    btn.onclick = function() {
-      // Ẩn nút sau khi bấm
-      btn.style.display = "none";
-      log.style.display = "block";
-
-      // 1. Chữ chạy nhảy liên tục
-      setInterval(function() {
-        log.textContent += "\n[HACKING] Injected payload " + Math.random().toString(16).substr(2, 8);
-        log.scrollTop = log.scrollHeight;
-      }, 50);
-
-      // 2. Xuất hiện cửa sổ lỗi vô hạn
-      setInterval(function() {
-        createErrorBox();
-      }, 150);
-    };
-
-    let zIndex = 100;
-    function createErrorBox() {
-      const box = document.createElement('div');
-      
-      // Kiểu dáng cửa sổ thô sơ nhất
-      box.style.position = 'absolute';
-      box.style.width = '240px';
-      box.style.background = '#c0c0c0';
-      box.style.border = '2px solid black';
-      box.style.padding = '4px';
-      box.style.zIndex = ++zIndex;
-
-      // Vị trí ngẫu nhiên trên màn hình
-      const x = Math.floor(Math.random() * (window.innerWidth - 260));
-      const y = Math.floor(Math.random() * (window.innerHeight - 150));
-      box.style.left = x + 'px';
-      box.style.top = y + 'px';
-
-      const randomMsg = errorMsgs[Math.floor(Math.random() * errorMsgs.length)];
-
-      box.innerHTML = `
-        <div style="background: navy; color: white; padding: 2px 4px; font-weight: bold; display: flex; justify-content: space-between;">
-          <span>Error</span>
-          <button onclick="this.parentElement.parentElement.remove()" style="font-size: 10px;">X</button>
-        </div>
-        <div style="padding: 10px; color: black; font-size: 12px;">
-          ❌ ${randomMsg}
-        </div>
-        <div style="text-align: center; padding-bottom: 6px;">
-          <button onclick="this.parentElement.parentElement.remove()">OK</button>
-        </div>
-      `;
-
-      document.body.appendChild(box);
-    }
-  </script>
 </body>
 </html>
