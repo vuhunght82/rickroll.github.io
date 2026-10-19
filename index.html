@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 95 - Critical System</title>
+  <title>Windows 95 - Critical Exploit</title>
   <style>
     * {
       box-sizing: border-box;
@@ -14,7 +14,7 @@
     }
 
     body {
-      background-color: #008080;
+      background-color: #008080; /* Màu nền Desktop cổ điển */
       font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
       font-size: 11px;
       overflow: hidden;
@@ -23,412 +23,40 @@
       position: relative;
     }
 
-    /* Hiệu ứng viền 3D nổi chuẩn Windows 95 */
+    /* Hiệu ứng rung lắc toàn màn hình khi kích hoạt */
+    @keyframes shake {
+      0% { transform: translate(2px, 2px) rotate(0deg); }
+      20% { transform: translate(-3px, 0px) rotate(1deg); }
+      40% { transform: translate(1px, -2px) rotate(-1deg); }
+      60% { transform: translate(-3px, 2px) rotate(0deg); }
+      80% { transform: translate(2px, -1px) rotate(1deg); }
+      100% { transform: translate(0px, 0px) rotate(0deg); }
+    }
+
+    .shaking {
+      animation: shake 0.25s infinite;
+    }
+
+    /* Viền 3D lồi & chìm chuẩn Windows 95 */
     .win-bevel-out {
       border: 2px solid;
       border-color: #ffffff #000000 #000000 #ffffff;
       box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px #808080;
     }
 
-    /* Hiệu ứng viền chìm */
     .win-bevel-in {
       border: 2px solid;
       border-color: #808080 #ffffff #ffffff #808080;
       box-shadow: inset 1px 1px 0px #000000, inset -1px -1px 0px #dfdfdf;
     }
 
-    /* Icon trên Desktop */
-    .desktop-area {
-      padding: 20px;
+    /* Vị trí nút bấm trung tâm màn hình */
+    .center-container {
       position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 5;
-    }
-
-    .hack-button-icon {
-      width: 130px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      cursor: pointer;
-      padding: 6px;
-      border: 1px dotted transparent;
-    }
-
-    .hack-button-icon:hover {
-      background-color: rgba(0, 0, 128, 0.3);
-    }
-
-    .hack-button-icon:active {
-      border: 1px dotted #ffffff;
-    }
-
-    .icon-img {
-      font-size: 40px;
-      margin-bottom: 4px;
-      filter: drop-shadow(1px 1px 0 #000);
-    }
-
-    .icon-label {
-      color: #ffffff;
-      background: #c00000;
-      padding: 2px 4px;
-      font-weight: bold;
-      border: 1px solid #ffffff;
-      box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
-    }
-
-    /* Taskbar cổ điển */
-    .taskbar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 28px;
-      background: #c0c0c0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 2px 3px;
-      z-index: 999999;
-    }
-
-    .start-btn {
-      height: 22px;
-      background: #c0c0c0;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 0 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .start-btn:active {
-      border-color: #000000 #ffffff #ffffff #000000;
-    }
-
-    .systray {
-      height: 22px;
-      padding: 2px 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #c0c0c0;
-    }
-
-    /* Ma trận chữ Matrix / Terminal chạy nền */
-    #matrixConsole {
-      display: none;
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 480px;
-      height: 320px;
-      background: #000000;
-      color: #00ff00;
-      font-family: "Courier New", Courier, monospace;
-      font-size: 13px;
-      padding: 10px;
-      overflow: hidden;
-      white-space: pre-wrap;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       z-index: 10;
-      opacity: 0.95;
+      text-align: center;
+      transition: transform 0.2s, opacity 0.2s;
     }
-
-    /* Kiểu hộp thoại lỗi Windows 95 */
-    .error-window {
-      position: absolute;
-      width: 280px;
-      background: #c0c0c0;
-      padding: 3px;
-      box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.7);
-      animation: pop 0.1s ease-out;
-    }
-
-    @keyframes pop {
-      from { transform: scale(0.85); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .win95-titlebar {
-      background: #000080;
-      color: #ffffff;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 4px;
-      font-weight: bold;
-      font-size: 11px;
-    }
-
-    .win95-close-btn {
-      width: 14px;
-      height: 14px;
-      background: #c0c0c0;
-      border: 1px solid;
-      border-color: #ffffff #000000 #000000 #ffffff;
-      font-size: 9px;
-      line-height: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .win95-body {
-      padding: 14px 10px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #c0c0c0;
-    }
-
-    .win95-icon-error {
-      width: 32px;
-      height: 32px;
-      min-width: 32px;
-      border-radius: 50%;
-      background: #ff0000;
-      color: #ffffff;
-      font-size: 22px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 1px 1px 0 #000;
-      border: 2px solid #ffffff;
-    }
-
-    .win95-message {
-      font-size: 11px;
-      color: #000000;
-      line-height: 1.4;
-      word-break: break-word;
-    }
-
-    .win95-actions {
-      display: flex;
-      justify-content: center;
-      padding-bottom: 8px;
-      background: #c0c0c0;
-    }
-
-    .win95-btn {
-      min-width: 70px;
-      height: 22px;
-      background: #c0c0c0;
-      border: 2px solid;
-      border-color: #ffffff #000000 #000000 #ffffff;
-      box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px #808080;
-      font-size: 11px;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .win95-btn:active {
-      border-color: #000000 #ffffff #ffffff #000000;
-      box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #dfdfdf;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Desktop Nút Hack -->
-  <div class="desktop-area">
-    <div class="hack-button-icon" onclick="startHackPayload()">
-      <div class="icon-img">💀</div>
-      <div class="icon-label">Bấm vào đây để hack PC của tui</div>
-    </div>
-  </div>
-
-  <!-- Terminal chạy code hack nhấp nháy -->
-  <div id="matrixConsole" class="win-bevel-in"></div>
-
-  <!-- Taskbar -->
-  <div class="taskbar win-bevel-out">
-    <div class="start-btn win-bevel-out">
-      <span>🪟</span>
-      <span>Start</span>
-    </div>
-    <div class="systray win-bevel-in">
-      <span>⏰</span>
-      <span id="systime">04:20 PM</span>
-    </div>
-  </div>
-
-  <script>
-    // Đồng hồ góc Taskbar
-    function updateClock() {
-      const d = new Date();
-      let h = d.getHours();
-      let m = String(d.getMinutes()).padStart(2, '0');
-      const ampm = h >= 12 ? 'PM' : 'AM';
-      h = h % 12 || 12;
-      document.getElementById('systime').textContent = `${h}:${m} ${ampm}`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // Giả lập âm thanh Beep Windows qua AudioContext
-    let audioCtx = null;
-    function playWinBeep() {
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(450, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.12);
-      } catch (e) {}
-    }
-
-    // Danh sách các thông báo lỗi kinh điển của Win95
-    const errorMessages = [
-      "This program has performed an illegal operation and will be shut down.",
-      "A fatal exception 0E has occurred at 0028:C0011E36 in VXD VMM(01) + 00010E36.",
-      "KERNEL32.DLL caused a general protection fault in module GDI.EXE at 0002:1874.",
-      "Stack overflow at line 0x7FFFFFFF.",
-      "Warning: System memory integrity compromised! Dumping RAM...",
-      "Hard drive partition C: is being reformatted.",
-      "Trojan.Win95.KaBoom detected in sector 0!",
-      "Unauthorized breach: Transmitting credentials to remote server...",
-      "SYSTEM HALTED: Hardware failure imminent!"
-    ];
-
-    const errorTitles = [
-      "Fatal Error",
-      "System Malfunction",
-      "Error Starting Program",
-      "STOP: 0x0000000A",
-      "Illegal Operation",
-      "Critical Warning"
-    ];
-
-    let currentZIndex = 100;
-    let isHacking = false;
-
-    function startHackPayload() {
-      if (isHacking) return;
-      isHacking = true;
-
-      // 1. Kích hoạt terminal chạy mã chữ hack
-      const terminal = document.getElementById('matrixConsole');
-      terminal.style.display = 'block';
-      terminal.style.zIndex = ++currentZIndex;
-
-      const codeSnippets = [
-        "INITIALIZING BUFFER OVERFLOW EXPLOIT...",
-        "INJECTING PAYLOAD INTO SVCHOST.EXE...",
-        "DECRYPTING SAM DATABASE...",
-        "BYPASSING WINDOWS REGISTRY LOCK...",
-        "ROOT PRIVILEGES ACQUIRED [UID: 0]",
-        "DELETING SYSTEM32 RECURSIVELY...",
-        "SENDING PRIVATE KEYS TO 192.168.1.666...",
-        "CORRUPTING BOOT SECTOR..."
-      ];
-
-      setInterval(() => {
-        const line = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
-        const hex = "0x" + Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(8, '0');
-        terminal.innerText += `\n[${hex}] ${line}`;
-        terminal.scrollTop = terminal.scrollHeight;
-      }, 70);
-
-      // 2. Sinh cửa sổ lỗi dồn dập, vô hạn
-      let spawnDelay = 250;
-      function spawnLoop() {
-        createErrorWindow();
-        playWinBeep();
-        
-        // Tăng tốc dần độ dày đặc của cửa sổ
-        if (spawnDelay > 40) spawnDelay -= 5;
-        setTimeout(spawnLoop, spawnDelay);
-      }
-
-      spawnLoop();
-    }
-
-    function createErrorWindow() {
-      const win = document.createElement('div');
-      win.className = 'error-window win-bevel-out';
-      win.style.zIndex = ++currentZIndex;
-
-      // Tính vị trí ngẫu nhiên không tràn màn hình và tránh thanh taskbar
-      const maxX = Math.max(0, window.innerWidth - 300);
-      const maxY = Math.max(0, window.innerHeight - 180);
-      const randX = Math.floor(Math.random() * maxX);
-      const randY = Math.floor(Math.random() * maxY);
-
-      win.style.left = `${randX}px`;
-      win.style.top = `${randY}px`;
-
-      const title = errorTitles[Math.floor(Math.random() * errorTitles.length)];
-      const msg = errorMessages[Math.floor(Math.random() * errorMessages.length)];
-
-      win.innerHTML = `
-        <div class="win95-titlebar">
-          <span>${title}</span>
-          <div class="win95-close-btn" onclick="spawnMore(this)">✕</div>
-        </div>
-        <div class="win95-body">
-          <div class="win95-icon-error">✕</div>
-          <div class="win95-message">${msg}</div>
-        </div>
-        <div class="win95-actions">
-          <button class="win95-btn" onclick="spawnMore(this)">OK</button>
-        </div>
-      `;
-
-      // Kéo thả cửa sổ lỗi
-      attachDrag(win);
-      document.body.appendChild(win);
-    }
-
-    // Bấm OK hoặc dấu X sẽ nhân đôi thêm cửa sổ
-    function spawnMore(el) {
-      const parent = el.closest('.error-window');
-      if (parent) parent.remove();
-      createErrorWindow();
-      createErrorWindow();
-      playWinBeep();
-    }
-
-    // Kéo thả từng popup lỗi
-    function attachDrag(windowEl) {
-      const header = windowEl.querySelector('.win95-titlebar');
-      let isDragging = false;
-      let startX, startY, initX, initY;
-
-      header.addEventListener('mousedown', (e) => {
-        if (e.target.classList.contains('win95-close-btn')) return;
-        isDragging = true;
-        windowEl.style.zIndex = ++currentZIndex;
-        startX = e.clientX;
-        startY = e.clientY;
-        initX = windowEl.offsetLeft;
-        initY = windowEl.offsetTop;
-      });
-
-      window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        windowEl.style.left = `${initX + (e.clientX - startX)}px`;
-        windowEl.style.top = `${initY + (e.clientY - startY)}px`;
-      });
-
-      window.addEventListener('mouseup', () => {
-        isDragging = false;
-      });
-    }
-  </script>
-</body>
-</html>
