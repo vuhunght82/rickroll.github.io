@@ -110,4 +110,242 @@
     }
 
     .system-tray {
-      height: 2
+      height: 22px;
+      padding: 2px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #c0c0c0;
+    }
+
+    /* Start Menu */
+    .start-menu {
+      display: none;
+      position: fixed;
+      bottom: 28px;
+      left: 0;
+      width: 160px;
+      background: #c0c0c0;
+      z-index: 1001;
+      padding: 2px;
+    }
+
+    .start-menu.open {
+      display: flex;
+    }
+
+    .menu-sidebar {
+      background: #808080;
+      color: #c0c0c0;
+      width: 22px;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 5px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .menu-items {
+      flex: 1;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-item {
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .menu-item:hover {
+      background-color: #000080;
+      color: white;
+    }
+
+    /* Cửa sổ Windows */
+    .window {
+      position: absolute;
+      top: 60px;
+      left: 120px;
+      width: 320px;
+      background: #c0c0c0;
+      padding: 3px;
+      box-shadow: 1px 1px 0 #000;
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    .title-bar {
+      background: #000080;
+      color: white;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3px;
+      font-weight: bold;
+      cursor: move;
+    }
+
+    .title-bar.inactive {
+      background: #808080;
+    }
+
+    .title-bar-controls {
+      display: flex;
+      gap: 2px;
+    }
+
+    .win-btn {
+      width: 14px;
+      height: 13px;
+      background: #c0c0c0;
+      border: 1px solid #ffffff;
+      border-right-color: #000000;
+      border-bottom-color: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      line-height: 9px;
+      cursor: pointer;
+      color: black;
+    }
+
+    .win-btn:active {
+      border-color: #000000 #ffffff #ffffff #000000;
+    }
+
+    .window-body {
+      background: #ffffff;
+      margin-top: 2px;
+      padding: 10px;
+      min-height: 120px;
+      color: black;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Biểu tượng trên màn hình Desktop -->
+  <div class="desktop">
+    <div class="icon" ondblclick="openWindow()">
+      <div class="icon-img">💻</div>
+      <div class="icon-label">My Computer</div>
+    </div>
+    <div class="icon">
+      <div class="icon-img">🗑️</div>
+      <div class="icon-label">Recycle Bin</div>
+    </div>
+  </div>
+
+  <!-- Cửa sổ giả lập -->
+  <div class="window win-bevel-out" id="myWindow">
+    <div class="title-bar" id="windowHeader">
+      <span>My Computer</span>
+      <div class="title-bar-controls">
+        <button class="win-btn">_</button>
+        <button class="win-btn">□</button>
+        <button class="win-btn" onclick="closeWindow()">✕</button>
+      </div>
+    </div>
+    <div class="window-body win-bevel-in">
+      <p><b>(C:) 3.5 Floppy</b></p>
+      <p style="margin-top: 8px;">Chào mừng bạn đến với giao diện Windows 95 mô phỏng!</p>
+    </div>
+  </div>
+
+  <!-- Start Menu -->
+  <div class="start-menu win-bevel-out" id="startMenu">
+    <div class="menu-sidebar"><b>Windows</b>95</div>
+    <ul class="menu-items">
+      <li class="menu-item" onclick="openWindow()">📁 Programs</li>
+      <li class="menu-item">📄 Documents</li>
+      <li class="menu-item">⚙️ Settings</li>
+      <li class="menu-item" style="border-top: 1px solid #808080; margin-top: 4px;">🔌 Shut Down...</li>
+    </ul>
+  </div>
+
+  <!-- Taskbar ở đáy màn hình -->
+  <div class="taskbar win-bevel-out">
+    <div class="start-button win-bevel-out" id="startBtn" onclick="toggleStartMenu()">
+      <span style="font-size: 14px;">🪟</span>
+      <span>Start</span>
+    </div>
+
+    <div class="system-tray win-bevel-in">
+      <span id="clock">12:00 PM</span>
+    </div>
+  </div>
+
+  <script>
+    // Đồng hồ System Tray
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      document.getElementById('clock').textContent = `${hours}:${minutes} ${ampm}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Toggle Start Menu
+    const startBtn = document.getElementById('startBtn');
+    const startMenu = document.getElementById('startMenu');
+
+    function toggleStartMenu() {
+      const isOpen = startMenu.classList.toggle('open');
+      startBtn.classList.toggle('active', isOpen);
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!startBtn.contains(e.target) && !startMenu.contains(e.target)) {
+        startMenu.classList.remove('open');
+        startBtn.classList.remove('active');
+      }
+    });
+
+    // Quản lý cửa sổ
+    const win = document.getElementById('myWindow');
+    function closeWindow() {
+      win.style.display = 'none';
+    }
+    function openWindow() {
+      win.style.display = 'flex';
+      startMenu.classList.remove('open');
+      startBtn.classList.remove('active');
+    }
+
+    // Kéo thả cửa sổ (Drag & Drop)
+    const header = document.getElementById('windowHeader');
+    let isDragging = false;
+    let offsetX = 0, offsetY = 0;
+
+    header.addEventListener('mousedown', (e) => {
+      if (e.target.tagName.toLowerCase() === 'button') return;
+      isDragging = true;
+      offsetX = e.clientX - win.offsetLeft;
+      offsetY = e.clientY - win.offsetTop;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      win.style.left = `${e.clientX - offsetX}px`;
+      win.style.top = `${e.clientY - offsetY}px`;
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+  </script>
+</body>
+</html>
