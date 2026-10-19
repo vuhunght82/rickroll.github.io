@@ -3,49 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Windows 95 Desktop</title>
+  <title>Windows 95</title>
   <style>
-    /* Reset & Font hệ thống chuẩn Windows 95 */
     * {
       box-sizing: border-box;
       user-select: none;
+      -webkit-user-select: none;
       margin: 0;
       padding: 0;
     }
 
     body {
-      background-color: #008080; /* Màu nền Desktop mặc định của Win95 */
-      font-family: "MS Sans Serif", Tahoma, sans-serif;
+      background-color: #008080; /* Màu nền Desktop cổ điển */
+      font-family: "MS Sans Serif", Arial, sans-serif;
       font-size: 11px;
       overflow: hidden;
       height: 100vh;
       width: 100vw;
     }
 
-    /* Hiệu ứng viền 3D cổ điển */
+    /* Hiệu ứng viền nổi 3D Windows 95 */
     .win-bevel-out {
-      border-top: 1.5px solid #ffffff;
-      border-left: 1.5px solid #ffffff;
-      border-right: 1.5px solid #000000;
-      border-bottom: 1.5px solid #000000;
-      box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+      border: 2px solid;
+      border-color: #ffffff #000000 #000000 #ffffff;
+      box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px #808080;
     }
 
+    /* Hiệu ứng viền chìm 3D */
     .win-bevel-in {
-      border-top: 1.5px solid #808080;
-      border-left: 1.5px solid #808080;
-      border-right: 1.5px solid #ffffff;
-      border-bottom: 1.5px solid #ffffff;
-      box-shadow: inset 1px 1px 0 #000000, inset -1px -1px 0 #dfdfdf;
+      border: 2px solid;
+      border-color: #808080 #ffffff #ffffff #808080;
+      box-shadow: inset 1px 1px 0px #000000, inset -1px -1px 0px #dfdfdf;
     }
 
     /* Desktop Icons */
     .desktop {
-      padding: 10px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 24px;
       width: 80px;
+      height: calc(100vh - 28px);
     }
 
     .icon {
@@ -58,21 +56,19 @@
     }
 
     .icon-img {
-      width: 32px;
-      height: 32px;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
+      font-size: 30px;
+      margin-bottom: 2px;
     }
 
     .icon-label {
-      padding: 1px 3px;
+      padding: 1px 4px;
+      font-size: 11px;
     }
 
-    .icon:active .icon-label, .icon.selected .icon-label {
+    .icon.selected .icon-label {
       background-color: #000080;
+      color: #ffffff;
+      outline: 1px dotted #ffff80;
     }
 
     /* Taskbar */
@@ -86,8 +82,15 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 2px 3px;
-      z-index: 1000;
+      padding: 2px;
+      z-index: 10000;
+    }
+
+    .taskbar-left {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 100%;
     }
 
     .start-button {
@@ -96,17 +99,38 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      padding: 2px 6px;
+      padding: 0 6px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .start-button:active, .start-button.active {
-      border-top: 1.5px solid #000000;
-      border-left: 1.5px solid #000000;
-      border-right: 1.5px solid #ffffff;
-      border-bottom: 1.5px solid #ffffff;
-      box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #dfdfdf;
+    .start-button:active, .start-button.active, .taskbar-app-btn.active {
+      border-color: #000000 #ffffff #ffffff #000000;
+      box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #dfdfdf;
+    }
+
+    .taskbar-divider {
+      width: 2px;
+      height: 20px;
+      border-left: 1px solid #808080;
+      border-right: 1px solid #ffffff;
+      margin: 0 2px;
+    }
+
+    .taskbar-app-btn {
+      height: 22px;
+      min-width: 120px;
+      max-width: 160px;
+      background: #c0c0c0;
+      display: none;
+      align-items: center;
+      padding: 0 6px;
+      font-size: 11px;
+      gap: 6px;
+      cursor: pointer;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .system-tray {
@@ -114,7 +138,7 @@
       padding: 2px 8px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       background: #c0c0c0;
     }
 
@@ -124,9 +148,9 @@
       position: fixed;
       bottom: 28px;
       left: 0;
-      width: 160px;
+      width: 180px;
       background: #c0c0c0;
-      z-index: 1001;
+      z-index: 10001;
       padding: 2px;
     }
 
@@ -137,25 +161,28 @@
     .menu-sidebar {
       background: #808080;
       color: #c0c0c0;
-      width: 22px;
+      width: 24px;
       display: flex;
       align-items: flex-end;
-      padding-bottom: 5px;
+      padding-bottom: 8px;
       writing-mode: vertical-rl;
       transform: rotate(180deg);
       font-weight: bold;
-      letter-spacing: 1px;
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+
+    .menu-sidebar span {
+      color: #ffffff;
     }
 
     .menu-items {
       flex: 1;
       list-style: none;
-      display: flex;
-      flex-direction: column;
     }
 
     .menu-item {
-      padding: 6px 10px;
+      padding: 6px 12px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -164,26 +191,44 @@
 
     .menu-item:hover {
       background-color: #000080;
-      color: white;
+      color: #ffffff;
+    }
+
+    .menu-separator {
+      height: 1px;
+      background: #808080;
+      border-bottom: 1px solid #ffffff;
+      margin: 3px 2px;
     }
 
     /* Cửa sổ Windows */
     .window {
       position: absolute;
-      top: 60px;
-      left: 120px;
-      width: 320px;
+      top: 50px;
+      left: 100px;
+      width: 380px;
+      height: 260px;
       background: #c0c0c0;
       padding: 3px;
-      box-shadow: 1px 1px 0 #000;
       display: flex;
       flex-direction: column;
       z-index: 10;
     }
 
+    .window.maximized {
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: calc(100vh - 28px) !important;
+    }
+
+    .window.hidden {
+      display: none !important;
+    }
+
     .title-bar {
       background: #000080;
-      color: white;
+      color: #ffffff;
       height: 18px;
       display: flex;
       align-items: center;
@@ -193,100 +238,117 @@
       cursor: move;
     }
 
-    .title-bar.inactive {
-      background: #808080;
-    }
-
     .title-bar-controls {
       display: flex;
       gap: 2px;
     }
 
     .win-btn {
-      width: 14px;
-      height: 13px;
+      width: 16px;
+      height: 14px;
       background: #c0c0c0;
-      border: 1px solid #ffffff;
-      border-right-color: #000000;
-      border-bottom-color: #000000;
+      border: 1px solid;
+      border-color: #ffffff #000000 #000000 #ffffff;
+      font-size: 10px;
+      font-weight: bold;
+      line-height: 10px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 9px;
-      line-height: 9px;
-      cursor: pointer;
-      color: black;
     }
 
     .win-btn:active {
       border-color: #000000 #ffffff #ffffff #000000;
     }
 
+    .window-menu {
+      display: flex;
+      gap: 12px;
+      padding: 2px 6px;
+      font-size: 11px;
+    }
+
     .window-body {
+      flex: 1;
       background: #ffffff;
       margin-top: 2px;
       padding: 10px;
-      min-height: 120px;
-      color: black;
+      overflow: auto;
       font-size: 12px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Biểu tượng trên màn hình Desktop -->
-  <div class="desktop">
-    <div class="icon" ondblclick="openWindow()">
+  <!-- Desktop Icons -->
+  <div class="desktop" id="desktop">
+    <div class="icon" id="iconMyComputer" ondblclick="openApp('My Computer')">
       <div class="icon-img">💻</div>
       <div class="icon-label">My Computer</div>
     </div>
-    <div class="icon">
+    <div class="icon" id="iconRecycleBin" ondblclick="openApp('Recycle Bin')">
       <div class="icon-img">🗑️</div>
       <div class="icon-label">Recycle Bin</div>
     </div>
   </div>
 
   <!-- Cửa sổ giả lập -->
-  <div class="window win-bevel-out" id="myWindow">
+  <div class="window win-bevel-out" id="appWindow">
     <div class="title-bar" id="windowHeader">
-      <span>My Computer</span>
+      <span id="windowTitle">My Computer</span>
       <div class="title-bar-controls">
-        <button class="win-btn">_</button>
-        <button class="win-btn">□</button>
+        <button class="win-btn" onclick="minimizeWindow()">_</button>
+        <button class="win-btn" onclick="toggleMaximize()">🗖</button>
         <button class="win-btn" onclick="closeWindow()">✕</button>
       </div>
     </div>
-    <div class="window-body win-bevel-in">
-      <p><b>(C:) 3.5 Floppy</b></p>
-      <p style="margin-top: 8px;">Chào mừng bạn đến với giao diện Windows 95 mô phỏng!</p>
+    <div class="window-menu">
+      <span><u>F</u>ile</span>
+      <span><u>E</u>dit</span>
+      <span><u>V</u>iew</span>
+      <span><u>H</u>elp</span>
+    </div>
+    <div class="window-body win-bevel-in" id="windowContent">
+      <p><b>(C:) Ổ đĩa hệ thống</b></p>
+      <p style="margin-top: 8px;">Windows 95 đã được khắc phục toàn bộ lỗi điều khiển và drag-and-drop.</p>
     </div>
   </div>
 
   <!-- Start Menu -->
   <div class="start-menu win-bevel-out" id="startMenu">
-    <div class="menu-sidebar"><b>Windows</b>95</div>
+    <div class="menu-sidebar"><span>Windows</span>95</div>
     <ul class="menu-items">
-      <li class="menu-item" onclick="openWindow()">📁 Programs</li>
-      <li class="menu-item">📄 Documents</li>
-      <li class="menu-item">⚙️ Settings</li>
-      <li class="menu-item" style="border-top: 1px solid #808080; margin-top: 4px;">🔌 Shut Down...</li>
+      <li class="menu-item" onclick="openApp('Programs')">📁 <u>P</u>rograms</li>
+      <li class="menu-item" onclick="openApp('Documents')">📄 <u>D</u>ocuments</li>
+      <li class="menu-item" onclick="openApp('Settings')">⚙️ <u>S</u>ettings</li>
+      <div class="menu-separator"></div>
+      <li class="menu-item" onclick="alert('Bây giờ bạn có thể tắt máy an toàn.')">🔌 Sh<u>u</u>t Down...</li>
     </ul>
   </div>
 
-  <!-- Taskbar ở đáy màn hình -->
+  <!-- Taskbar -->
   <div class="taskbar win-bevel-out">
-    <div class="start-button win-bevel-out" id="startBtn" onclick="toggleStartMenu()">
-      <span style="font-size: 14px;">🪟</span>
-      <span>Start</span>
+    <div class="taskbar-left">
+      <div class="start-button win-bevel-out" id="startBtn" onclick="toggleStartMenu()">
+        <span>🪟</span>
+        <span>Start</span>
+      </div>
+      <div class="taskbar-divider"></div>
+      <div class="taskbar-app-btn win-bevel-out" id="taskbarApp" onclick="toggleWindowFromTaskbar()">
+        <span>💻</span>
+        <span id="taskbarAppTitle">My Computer</span>
+      </div>
     </div>
 
     <div class="system-tray win-bevel-in">
+      <span style="font-size: 10px;">🔊</span>
       <span id="clock">12:00 PM</span>
     </div>
   </div>
 
   <script>
-    // Đồng hồ System Tray
+    // 1. Cập nhật đồng hồ hệ thống
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
@@ -298,7 +360,7 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Toggle Start Menu
+    // 2. Xử lý Start Menu & đóng khi click ngoài
     const startBtn = document.getElementById('startBtn');
     const startMenu = document.getElementById('startMenu');
 
@@ -312,38 +374,90 @@
         startMenu.classList.remove('open');
         startBtn.classList.remove('active');
       }
+      // Bỏ chọn icon nếu click vào nền desktop
+      if (e.target.id === 'desktop') {
+        document.querySelectorAll('.icon').forEach(ic => ic.classList.remove('selected'));
+      }
     });
 
-    // Quản lý cửa sổ
-    const win = document.getElementById('myWindow');
-    function closeWindow() {
-      win.style.display = 'none';
-    }
-    function openWindow() {
-      win.style.display = 'flex';
+    // 3. Highlight Icon khi click
+    document.querySelectorAll('.icon').forEach(icon => {
+      icon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.icon').forEach(ic => ic.classList.remove('selected'));
+        icon.classList.add('selected');
+      });
+    });
+
+    // 4. Quản lý cửa sổ & Taskbar
+    const appWindow = document.getElementById('appWindow');
+    const taskbarApp = document.getElementById('taskbarApp');
+    const windowTitle = document.getElementById('windowTitle');
+    const taskbarAppTitle = document.getElementById('taskbarAppTitle');
+
+    function openApp(name) {
+      windowTitle.textContent = name;
+      taskbarAppTitle.textContent = name;
+      appWindow.classList.remove('hidden');
+      taskbarApp.style.display = 'flex';
+      taskbarApp.classList.add('active');
       startMenu.classList.remove('open');
       startBtn.classList.remove('active');
     }
 
-    // Kéo thả cửa sổ (Drag & Drop)
+    function closeWindow() {
+      appWindow.classList.add('hidden');
+      taskbarApp.style.display = 'none';
+      taskbarApp.classList.remove('active');
+    }
+
+    function minimizeWindow() {
+      appWindow.classList.add('hidden');
+      taskbarApp.classList.remove('active');
+    }
+
+    function toggleMaximize() {
+      appWindow.classList.toggle('maximized');
+    }
+
+    function toggleWindowFromTaskbar() {
+      if (appWindow.classList.contains('hidden')) {
+        appWindow.classList.remove('hidden');
+        taskbarApp.classList.add('active');
+      } else {
+        appWindow.classList.add('hidden');
+        taskbarApp.classList.remove('active');
+      }
+    }
+
+    // Khởi tạo hiển thị cửa sổ ban đầu
+    taskbarApp.style.display = 'flex';
+    taskbarApp.classList.add('active');
+
+    // 5. Kéo thả cửa sổ mượt mà (Window Dragging)
     const header = document.getElementById('windowHeader');
     let isDragging = false;
-    let offsetX = 0, offsetY = 0;
+    let startX = 0, startY = 0;
+    let initialLeft = 0, initialTop = 0;
 
     header.addEventListener('mousedown', (e) => {
-      if (e.target.tagName.toLowerCase() === 'button') return;
+      if (e.target.tagName.toLowerCase() === 'button' || appWindow.classList.contains('maximized')) return;
       isDragging = true;
-      offsetX = e.clientX - win.offsetLeft;
-      offsetY = e.clientY - win.offsetTop;
+      startX = e.clientX;
+      startY = e.clientY;
+      initialLeft = appWindow.offsetLeft;
+      initialTop = appWindow.offsetTop;
     });
 
-    document.addEventListener('mousemove', (e) => {
+    window.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
-      win.style.left = `${e.clientX - offsetX}px`;
-      win.style.top = `${e.clientY - offsetY}px`;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      appWindow.style.left = `${initialLeft + dx}px`;
+      appWindow.style.top = `${initialTop + dy}px`;
     });
 
-    document.addEventListener('mouseup', () => {
+    window.addEventListener('mouseup', () => {
       isDragging = false;
     });
   </script>
