@@ -60,3 +60,345 @@
       text-align: center;
       transition: transform 0.2s, opacity 0.2s;
     }
+
+    .hack-btn-card {
+      background: #c0c0c0;
+      padding: 16px 24px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .hack-btn-card:active {
+      border-color: #000000 #ffffff #ffffff #000000;
+      box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #dfdfdf;
+    }
+
+    .hack-btn-card .icon-skull {
+      font-size: 48px;
+      filter: drop-shadow(2px 2px 0px #000000);
+    }
+
+    .hack-btn-card .label-btn {
+      background: #c00000;
+      color: #ffffff;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: bold;
+      border: 1px solid #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* Biến mất nút bấm sau khi đã click */
+    .hacked .center-container {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    /* Màn hình chữ chạy nhảy (Console Hacking) */
+    #matrixTerminal {
+      display: none;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      width: 440px;
+      height: 320px;
+      background: #000000;
+      color: #00ff00;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 12px;
+      padding: 8px;
+      overflow: hidden;
+      white-space: pre-wrap;
+      z-index: 50;
+      opacity: 0.92;
+    }
+
+    /* Dòng chữ cảnh báo đỏ nhấp nháy trên toàn nền */
+    .warning-banner {
+      display: none;
+      position: fixed;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      color: #ffff00;
+      font-size: 20px;
+      font-weight: bold;
+      text-shadow: 2px 2px 0px #000;
+      z-index: 60;
+      animation: blink 0.3s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      to { visibility: hidden; }
+    }
+
+    /* Hộp thoại lỗi Windows 95 xuất hiện liên tục */
+    .error-dialog {
+      position: absolute;
+      width: 290px;
+      background: #c0c0c0;
+      padding: 2px;
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7);
+    }
+
+    .dialog-titlebar {
+      background: #000080;
+      color: #ffffff;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+      font-weight: bold;
+      font-size: 11px;
+    }
+
+    .dialog-close-btn {
+      width: 14px;
+      height: 14px;
+      background: #c0c0c0;
+      border: 1px solid;
+      border-color: #ffffff #000000 #000000 #ffffff;
+      font-size: 9px;
+      line-height: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .dialog-body {
+      padding: 12px 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-critical {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      background: #ff0000;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 1px 1px 0 #000;
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dialog-msg {
+      font-size: 11px;
+      color: #000000;
+      line-height: 1.35;
+    }
+
+    .dialog-footer {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 8px;
+    }
+
+    .win-btn-action {
+      min-width: 65px;
+      height: 22px;
+      background: #c0c0c0;
+      font-size: 11px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Thanh Taskbar đáy */
+    .taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 28px;
+      background: #c0c0c0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2px 4px;
+      z-index: 999999;
+    }
+
+    .start-btn {
+      height: 22px;
+      background: #c0c0c0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 6px;
+      font-weight: bold;
+    }
+
+    .clock-tray {
+      height: 22px;
+      padding: 2px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #c0c0c0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nút kích hoạt trung tâm -->
+  <div class="center-container">
+    <div class="hack-btn-card win-bevel-out" id="hackTrigger">
+      <div class="icon-skull">☠️</div>
+      <div class="label-btn">Bấm vào đây để hack PC của tui</div>
+    </div>
+  </div>
+
+  <!-- Dòng chữ cảnh báo nhấp nháy -->
+  <div class="warning-banner" id="warningBanner">⚠ SYSTEM INTEGRITY COMPROMISED - FATAL EXPLOIT ⚠</div>
+
+  <!-- Bảng chữ code bay nhảy / Terminal -->
+  <div id="matrixTerminal" class="win-bevel-in"></div>
+
+  <!-- Taskbar Windows 95 -->
+  <div class="taskbar win-bevel-out">
+    <div class="start-btn win-bevel-out">
+      <span>🪟</span>
+      <span>Start</span>
+    </div>
+    <div class="clock-tray win-bevel-in">
+      <span id="sysclock">12:00 PM</span>
+    </div>
+  </div>
+
+  <script>
+    // 1. Đồng hồ thanh taskbar
+    function updateClock() {
+      const d = new Date();
+      let h = d.getHours();
+      const m = String(d.getMinutes()).padStart(2, '0');
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      document.getElementById('sysclock').textContent = `${h}:${m} ${ampm}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 2. Tạo âm thanh tiếng Bíp lỗi Windows (Web Audio API)
+    let audioContext = null;
+    function playBeep() {
+      try {
+        if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(520, audioContext.currentTime);
+        gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        osc.start();
+        osc.stop(audioContext.currentTime + 0.1);
+      } catch (e) {}
+    }
+
+    // 3. Danh sách thông báo lỗi dồn dập
+    const errorList = [
+      "This program has performed an illegal operation and will be shut down.",
+      "Fatal Exception 0E occurred at 0028:C0011E36 in VXD VMM(01).",
+      "KERNEL32.DLL caused a general protection fault in module GDI.EXE.",
+      "Stack overflow detected at memory address 0x00007FFF.",
+      "System resources depleted. Windows will terminate immediately.",
+      "Injected exploit payload: Rootkit installed into MBR.",
+      "Hard disk partition C: corrupted. Data corruption irreversible!"
+    ];
+
+    let zIndexCount = 100;
+    let spawnTimer = null;
+
+    // 4. Kích hoạt chuỗi hack khi bấm nút
+    document.getElementById('hackTrigger').addEventListener('click', function () {
+      if (document.body.classList.contains('hacked')) return;
+
+      document.body.classList.add('hacked', 'shaking');
+      document.getElementById('warningBanner').style.display = 'block';
+
+      // Chạy bảng mã nhấp nháy liên tục
+      const terminal = document.getElementById('matrixTerminal');
+      terminal.style.display = 'block';
+
+      const hackLogs = [
+        "EXPLOIT: INJECTING PAYLOAD INTO KERNEL32...",
+        "STACK: OVERWRITING RETURN ADDRESS WITH SHELLCODE...",
+        "MEMORY: CORRUPTING VMM32 PAGETABLES...",
+        "PRIVILEGE: RING 3 ELEVATING TO RING 0...",
+        "DELETING SYSTEM ROOT RECURSIVELY...",
+        "DUMPING SAM REGISTRY KEYS TO REMOTE HOST..."
+      ];
+
+      setInterval(() => {
+        const hex = "0x" + Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase().padStart(8, '0');
+        const text = hackLogs[Math.floor(Math.random() * hackLogs.length)];
+        terminal.innerText += `\n[${hex}] ${text}`;
+        terminal.scrollTop = terminal.scrollHeight;
+      }, 60);
+
+      // Tạo cửa sổ lỗi liên tục vô hạn với tốc độ dồn dập
+      let delay = 220;
+      function spawnInfinity() {
+        createErrorPopup();
+        playBeep();
+        if (delay > 35) delay -= 4; // Tăng dần tốc độ xuất hiện
+        spawnTimer = setTimeout(spawnInfinity, delay);
+      }
+
+      spawnInfinity();
+    });
+
+    function createErrorPopup() {
+      const dialog = document.createElement('div');
+      dialog.className = 'error-dialog win-bevel-out';
+      dialog.style.zIndex = ++zIndexCount;
+
+      // Tính vị trí ngẫu nhiên không tràn khỏi màn hình
+      const maxW = Math.max(0, window.innerWidth - 300);
+      const maxH = Math.max(0, window.innerHeight - 170);
+      dialog.style.left = `${Math.floor(Math.random() * maxW)}px`;
+      dialog.style.top = `${Math.floor(Math.random() * maxH)}px`;
+
+      const msg = errorList[Math.floor(Math.random() * errorList.length)];
+
+      dialog.innerHTML = `
+        <div class="dialog-titlebar">
+          <span>Fatal Error</span>
+          <div class="dialog-close-btn" onclick="multiplyErrors(this)">✕</div>
+        </div>
+        <div class="dialog-body">
+          <div class="icon-critical">✕</div>
+          <div class="dialog-msg">${msg}</div>
+        </div>
+        <div class="dialog-footer">
+          <button class="win-btn-action win-bevel-out" onclick="multiplyErrors(this)">OK</button>
+        </div>
+      `;
+
+      document.body.appendChild(dialog);
+    }
+
+    // Bấm OK hoặc dấu ✕ sẽ đóng popup cũ và sinh thêm 2 popup mới
+    function multiplyErrors(el) {
+      const win = el.closest('.error-dialog');
+      if (win) win.remove();
+      createErrorPopup();
+      createErrorPopup();
+      playBeep();
+    }
+  </script>
+</body>
+</html>
