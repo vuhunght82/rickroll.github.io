@@ -3,124 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bất ngờ chưa!</title>
+    <title>Hack Tool 2026</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background-color: #000000;
+            background-color: #0b0f19;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            font-family: 'Arial Black', Impact, sans-serif;
-            cursor: pointer;
             user-select: none;
         }
 
-        /* Lớp phủ hiệu ứng vỡ màn hình */
-        .crack-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-size: cover;
-            background-position: center;
-            pointer-events: none; /* Không cản trở click tiếp theo */
-            z-index: 10;
-            opacity: 0;
-            transform: scale(1.2);
-            transition: transform 0.1s ease-out, opacity 0.05s ease-out;
-        }
-
-        /* Khi bị đấm (kích hoạt bằng JS) */
-        .cracked .crack-overlay {
-            opacity: 1;
-            transform: scale(1);
-            /* Sử dụng ảnh kính vỡ dạng trong suốt nền PNG */
-            background-image: url('https://pikbest.com');
-        }
-
-        /* Hiệu ứng rung lắc toàn màn hình khi đấm */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(0px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(2px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(2px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
-
-        .shake {
-            animation: shake 0.3s;
-            animation-iteration-count: 1;
-        }
-
-        /* Cấu trúc chữ hiển thị sau khi đấm */
-        h1 {
-            color: #FF0000;
-            font-size: 8vw;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 5px 5px 0px #FFFFFF;
-            margin: 0;
-            padding: 20px;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 5;
-        }
-
-        /* Hiện chữ zoom to lên */
-        .cracked h1 {
-            opacity: 1;
-            transform: scale(1);
-        }
-        
-        /* Dòng chữ hướng dẫn ban đầu */
-        .instruction {
-            color: #fff;
+        /* Thiết kế nút bấm ban đầu */
+        .hack-btn {
+            background: linear-gradient(135deg, #ff0055, #9900ff);
+            color: white;
+            border: none;
+            padding: 20px 40px;
             font-size: 24px;
-            position: absolute;
-            transition: opacity 0.2s;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.6);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 999999;
         }
-        .cracked .instruction {
-            opacity: 0;
+
+        .hack-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(153, 0, 255, 0.9);
+        }
+
+        /* Pop-up cảnh báo giả */
+        .fake-popup {
+            position: absolute;
+            width: 320px;
+            background-color: #300a24; /* Màu terminal ubuntu */
+            border: 2px solid #dfdbd2;
+            border-radius: 5px;
+            color: white;
+            font-family: sans-serif;
+            box-shadow: 10px 10px 25px rgba(0,0,0,0.5);
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .popup-header {
+            background: linear-gradient(to bottom, #f3f2e4, #e6e5d7);
+            color: #333;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #c4c2b3;
+        }
+
+        .popup-body {
+            padding: 15px;
+            font-size: 14px;
+            background-color: #fff;
+            color: #000;
+        }
+
+        /* Chữ DVD bay nhảy */
+        .dvd-text {
+            position: absolute;
+            font-size: 45px;
+            font-weight: bold;
+            white-space: nowrap;
+            z-index: 8888;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* Ma trận chữ rơi làm loạn nền */
+        .matrix-txt {
+            position: absolute;
+            font-size: 14px;
+            color: #00ff00;
+            pointer-events: none;
+            z-index: 1;
+            white-space: nowrap;
+        }
+
+        /* Đống thông báo lỗi nhảy liên tục */
+        .glitch-text {
+            position: absolute;
+            color: #ff0000;
+            font-size: 5vw;
+            font-weight: 900;
+            z-index: 999;
+            pointer-events: none;
+            opacity: 0.8;
         }
     </style>
 </head>
 <body>
 
-    <div class="instruction">BẤM VÀO MÀN HÌNH ĐỂ XEM</div>
-    <div class="crack-overlay"></div>
-    <h1>BẠN BỊ LỪA RỒI!</h1>
+    <button class="hack-btn" id="startBtn">Bấm vào đây để hack máy tính của tui</button>
+
+    <!-- Thêm file nhạc Rick Roll chạy ẩn khi bấm (tùy chọn) -->
+    <audio id="trollAudio" src="https://soundjay.com" loop></audio>
 
     <script>
-        document.body.addEventListener('click', function() {
-            // Nếu đã vỡ rồi thì không chạy lại nữa
-            if (this.classList.contains('cracked')) return;
+        const startBtn = document.getElementById('startBtn');
+        const audio = document.getElementById('trollAudio');
+        let dvdElements = [];
 
-            // Thêm hiệu ứng rung và hiệu ứng vỡ
-            this.classList.add('shake', 'cracked');
+        // Nội dung danh sách cảnh báo troll ngẫu nhiên
+        const alertMessages = [
+            "⚠️ CẢNH BÁO: Đang xóa sạch thư mục ổ C...",
+            "🛑 ERROR 404: Trình duyệt của bạn đang bị rò rỉ dữ liệu!",
+            "🔥 Trojản_Win32.RickRoll.a đã cài đặt thành công.",
+            "💸 Đang chuyển toàn bộ số dư tài khoản sang ví hacker...",
+            "📱 Đang gửi ảnh tự sướng của bạn lên mạng xã hội...",
+            "🚨 Phát hiện 9999 virus đang tải về máy!",
+            "☠️ Hệ điều hành của bạn sẽ tự hủy sau 5 giây..."
+        ];
 
-            // Thêm âm thanh đấm/vỡ kính (tùy chọn)
-            let audio = new Audio('https://soundjay.com');
-            audio.play().catch(e => console.log("Cần tương tác trước để phát âm thanh"));
+        startBtn.addEventListener('click', () => {
+            // 1. Ẩn nút bấm chính đi để nạn nhân không bấm lại được
+            startBtn.style.display = 'none';
 
-            // Xóa lớp rung sau khi hoàn thành animation để tránh lỗi giao diện
-            setTimeout(() => {
-                document.body.classList.remove('shake');
-            }, 300);
+            // Phát âm thanh/nhạc troll
+            audio.play().catch(() => {});
+
+            // 2. Tạo 1 đống chữ DVD bay vòng vòng va đập màn hình
+            for (let i = 0; i < 8; i++) {
+                createDVDText();
+            }
+            setInterval(moveDVDs, 16); // Chạy hiệu ứng mượt mà (~60fps)
+
+            // 3. Tạo pop-up xuất hiện dồn dập
+            let popupCount = 0;
+            const popupInterval = setInterval(() => {
+                createFakePopup();
+                popupCount++;
+                if (popupCount > 35) clearInterval(popupInterval); // Giới hạn số lượng kẻo treo máy thật
+            }, 250);
+
+            // 4. Tạo ma trận chữ rơi loạn xạ nền
+            setInterval(createMatrixRain, 80);
+
+            // 5. Hiện chữ to chớp nháy gây rối mắt
+            setInterval(createGlitchText, 400);
         });
-    </script>
 
+        // HÀM TẠO CHỮ DVD BAY ĐẬP MÀN HÌNH
+        function createDVDText() {
+            const dvd = document.createElement('div');
+            dvd.className = 'dvd-text';
+            dvd.innerText = 'BẠN BỊ LỪA RỒI';
+            
+            // Tọa độ ngẫu nhiên ban đầu
+            let x = Math.random() * (window.innerWidth - 250);
+            let y = Math.random() * (window.innerHeight - 50);
+            // Tốc độ di chuyển ngẫu nhiên
+            let dx = (Math.random() > 0.5 ? 3 : -3) * (Math.random() * 2 + 1);
+            let dy = (Math.random() > 0.5 ? 3 : -3) * (Math.random() * 2 + 1);
+            
+            dvd.style.left = x + 'px';
+            dvd.style.top = y + 'px';
+            dvd.style.color = getRandomColor();
+            
+            document.body.appendChild(dvd);
+            dvdElements.push({ element: dvd, x, y, dx, dy });
+        }
+
+        function moveDVDs() {
+            dvdElements.forEach(item => {
+                item.x += item.dx;
+                item.y += item.dy;
+
+                // Va chạm cạnh ngang
+                if (item.x <= 0 || item.x >= window.innerWidth - item.element.offsetWidth) {
+                    item.dx = -item.dx;
+                    item.element.style.color = getRandomColor();
+                }
+                // Va chạm cạnh dọc
+                if (item.y <= 0 || item.y >= window.innerHeight - item.element.offsetHeight) {
+                    item.dy = -item.dy;
+                    item.element.style.color = getRandomColor();
+                }
+
+                item.element.style.left = item.x + 'px';
+                item.element.style.top = item.y + 'px';
+            });
+        }
+
+        // HÀM TẠO POP-UP LIÊN TỤC
+        function createFakePopup() {
+            const popup = document.createElement('div');
+            popup.className = 'fake-popup';
+            
+            const msg = alertMessages[Math.floor(Math.random() * alertMessages.length)];
+            
+            popup.innerHTML = `
+                <div class="popup-header">
+                    <span>System Critical Error</span>
+                    <span style="cursor:pointer" onclick="this.parentElement.parentElement.remove()">✕</span>
+                </div>
+                <div class="popup-body">${msg}</div>
+            `;
+
+            // Đặt vị trí xuất hiện lộn xộn khắp màn hình
+            popup.style.left = Math.random() * (window.innerWidth - 320) + 'px';
+            popup.style.top = Math.random() * (window.innerHeight - 150) + 'px';
+            
+            document.body.appendChild(popup);
+        }
+
+        // HÀM TẠO CHỮ RƠI MA TRẬN LÀM LOẠN NỀN
+        function createMatrixRain() {
+            const txt = document.createElement('div');
+            txt.className = 'matrix-txt';
+            txt.style.left = Math.random() * window.innerWidth + 'px';
+            txt.style.top = '-20px';
+            txt.innerText = Math.random() > 0.5 ? "01010101001" : "HACKING_PROGRESS_99%...";
+            
+            document.body.appendChild(txt);
+
+            let top = -20;
+            const fall = setInterval(() => {
+                top += 8;
+                txt.style.top = top + 'px';
+                if (top > window.innerHeight) {
+                    clearInterval(fall);
+                    txt.remove();
+                }
+            }, 20);
+        }
+
+        // HÀM HIỂN THỊ CHỮ TO LÀM RỐI
+        function createGlitchText() {
+            const gText = document.createElement('div');
+            gText.className = 'glitch-text';
+            gText.innerText = Math.random() > 0.5 ? "DANGER!" : "FATAL ERROR";
+            gText.style.left = Math.random() * 40 + 10 + 'vw';
+            gText.style.top = Math.random() * 60 + 10 + 'vh';
+            gText.style.color = getRandomColor();
+            
+            document.body.appendChild(gText);
+            
+            setTimeout(() => { gText.remove(); }, 600); // Tự biến mất để chữ khác hiện lên liên tục
+        }
+
+        // Tiện ích lấy màu ngẫu nhiên rực rỡ
+        function getRandomColor() {
+            const colors = ['#ff0000', '#00ff00', '#00ffff', '#ffff00', '#ff00ff', '#ff9900'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+    </script>
 </body>
 </html>
