@@ -85,21 +85,36 @@
             transform: scale(1);
         }
         
-        /* Dòng chữ hướng dẫn ban đầu */
+        /* Dòng chữ hướng dẫn ban đầu - bây giờ là nút vuông */
         .instruction {
             color: #fff;
             font-size: 24px;
             position: absolute;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, transform 0.08s;
+            background: rgba(255,255,255,0.04);
+            border: 3px solid #fff;
+            padding: 14px 28px;
+            border-radius: 0; /* Vuông */
+            cursor: pointer;
+            user-select: none;
+            left: 50%;
+            top: 70%;
+            transform: translateX(-50%);
+            z-index: 6;
+            pointer-events: auto;
+        }
+        .instruction:active {
+            transform: translateX(-50%) scale(0.98);
         }
         .cracked .instruction {
             opacity: 0;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="instruction">BẤM VÀO MÀN HÌNH ĐỂ XEM</div>
+    <button class="instruction">BẤM VÀO MÀN HÌNH ĐỂ XEM</button>
     <div class="crack-overlay"></div>
     <h1>BẠN BỊ LỪA RỒI!</h1>
 
